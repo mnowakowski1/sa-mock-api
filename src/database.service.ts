@@ -8,11 +8,8 @@ export class DatabaseService implements OnModuleInit {
 
   constructor() {
     this.pool = new Pool({
-      host: process.env.PG_HOST,
-      port: Number(process.env.PG_PORT),
-      user: process.env.PG_USER,
-      password: process.env.PG_PASSWORD,
-      database: process.env.PG_DATABASE,
+      connectionString: process.env.DB_CONNECTION_STRING,
+      ssl: { rejectUnauthorized: false },
     });
   }
 
