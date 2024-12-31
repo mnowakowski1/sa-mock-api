@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { DatabaseService } from './database.service';
 import { v4 as uuid } from 'uuid';
 
@@ -38,9 +46,8 @@ const randomizedData = [...Array(10)].map(() => ({
 @Controller()
 export class AppController {
   constructor(private readonly db: DatabaseService) {}
-
-  @Get()
-  getRoot(@Body() body: { name: string }) {
+  @Get(':id')
+  getRoot(@Param('id') id: string, @Body() body: { name: string }) {
     return {
       createdDate: new Date().toISOString(),
       description: '',
@@ -88,5 +95,23 @@ export class AppController {
     };
     await this.db.createRecord(newId, newData);
     return newData;
+  }
+
+  @Patch(':id')
+  @HttpCode(200)
+  updateRoot(
+    @Param('id') id: string,
+    @Body()
+    body: {
+      name?: string;
+      description?: string;
+      questions?: Array<{
+        id: string;
+        question: string;
+        referenceResponse?: string;
+      }>;
+    },
+  ) {
+    return;
   }
 }
