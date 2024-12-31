@@ -2,6 +2,39 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { DatabaseService } from './database.service';
 import { v4 as uuid } from 'uuid';
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+const randomizedData = [...Array(10)].map(() => ({
+  createdDate: new Date(
+    getRandomInt(2020, 2030),
+    getRandomInt(0, 11),
+    getRandomInt(1, 28),
+  ).toISOString(),
+  description:
+    Math.random() < 0.5 ? '' : `Random description ${getRandomInt(1, 1000)}`,
+  name: `Random Bean Bonanza ${getRandomInt(1, 1000)}`,
+  id: uuid(),
+  questions: [
+    {
+      id: uuid(),
+      question: `Random blue question ${getRandomInt(1, 1000)}`,
+      referenceResponse: `Random response A${getRandomInt(1, 1000)}`,
+    },
+    {
+      id: uuid(),
+      question: `Random red question ${getRandomInt(1, 1000)}`,
+      referenceResponse: `Random response B${getRandomInt(1, 1000)}`,
+    },
+  ],
+  stats: {
+    runsInMonth: getRandomInt(1, 500),
+    totalRuns: getRandomInt(501, 5000),
+  },
+  testRuns: [],
+}));
+
 @Controller()
 export class AppController {
   constructor(private readonly db: DatabaseService) {}
@@ -37,28 +70,7 @@ export class AppController {
   getList() {
     return {
       cursor: uuid(),
-      items: [
-        {
-          createdDate: '2024-12-28T22:07:24.078Z',
-          description: '',
-          name: "Lucinda's Jelly Bean Bonanza",
-          id: uuid(),
-          questions: [
-            {
-              id: uuid(),
-              question: 'What in the world has the blue colour?',
-              referenceResponse: 'Blueberries.',
-            },
-            {
-              id: uuid(),
-              question: 'What in the world has the red colour?',
-              referenceResponse: 'Cherries.',
-            },
-          ],
-          stats: { runsInMonth: 120, totalRuns: 500 },
-          testRuns: [],
-        },
-      ],
+      items: randomizedData,
     };
   }
 
