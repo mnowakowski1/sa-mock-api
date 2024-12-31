@@ -46,7 +46,7 @@ const randomizedData = [...Array(10)].map(() => ({
 @Controller()
 export class AppController {
   constructor(private readonly db: DatabaseService) {}
-  @Get(':id')
+  @Get('/tests/:id')
   getRoot(@Param('id') id: string, @Body() body: { name: string }) {
     return {
       createdDate: new Date().toISOString(),
@@ -73,7 +73,7 @@ export class AppController {
     };
   }
 
-  @Get('list')
+  @Get('/tests')
   getList() {
     return {
       cursor: uuid(),
@@ -81,7 +81,7 @@ export class AppController {
     };
   }
 
-  @Post()
+  @Post('/tests')
   async createRecord(@Body() body: { name: string }) {
     const newId = uuid();
     const newData = {
@@ -97,7 +97,7 @@ export class AppController {
     return newData;
   }
 
-  @Patch(':id')
+  @Patch('/tests/:id')
   @HttpCode(200)
   updateRoot(
     @Param('id') id: string,
